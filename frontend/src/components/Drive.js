@@ -58,7 +58,7 @@ const Drive = ({title,description,imageURL,userName,form,isUser,id}) => {
       <CardContent>
      
         <Typography paragraph>
-    {form}
+        <b>Form:</b> <a href={form} target={form} rel="noopener noreferrer">Register Link</a>
         </Typography>
       
       </CardContent>

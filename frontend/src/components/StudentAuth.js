@@ -26,33 +26,43 @@ const handleChange=(e)=>{
 
 };
 
-const sendRequest =async (type ='login') =>{
-
-const res = await axios.post(`http://localhost:5000/student/${type}`,
- {
-   name :inputs.name,
-    email:inputs.email,
-    password:inputs.password
-  })
-.catch((err)=>console.log(err))
-const data=await res.data;
-console.log(data);
-return data;
-  
+const sendRequest = async (type = 'login') => {
+  try {
+    const res = await axios.post(`http://localhost:5000/student/${type}`, {
+      name: inputs.name,
+      email: inputs.email,
+      password: inputs.password
+    });
+    return res.data;
+  } catch (err) {
+    throw new Error('Invalid credentials');
+  }
 
 }
 
 
-const handleSubmit =(e)=>{
-    e.preventDefault();
-    console.log(inputs);
-   if(isSignUp){
-    sendRequest('signup').then((data)=>localStorage.setItem('userId',data.user._id)).then(()=>dispath(authActions.studentLogin())).then((()=>navigate("/studentAuth"))).then((data)=>console.log(data))
-
-   }else{
-    sendRequest().then((data)=>localStorage.setItem('userId',data.user._id)).then(()=>dispath(authActions.studentLogin())).then((()=>navigate("/studentDrives"))).then((data)=>console.log(data))
-   }
+const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log(inputs);
+  if (isSignUp) {
+    sendRequest('signup')
+      .then((data) => {
+        localStorage.setItem('userId', data.user._id);
+        return dispath(authActions.studentLogin());
+      })
+      .then(() => navigate("/studentAuth"))
+      .catch((error) => alert(error.message));
+  } else {
+    sendRequest()
+      .then((data) => {
+        localStorage.setItem('userId', data.user._id);
+        return dispath(authActions.studentLogin());
+      })
+      .then(() => navigate("/studentDrives"))
+      .catch((error) => alert(error.message));
+  }
 }
+
   return (
     <form onSubmit={handleSubmit}>
     <Box maxWidth={400} display='flex' flexDirection={'column'} alignItems='center' justifyContent={'center'} boxShadow='10px 10px 20px #ccc' padding={3} margin='auto' marginTop={5} borderRadius={5}>

@@ -23,33 +23,48 @@ const Auth = () => {
     }));
 
   };
+  // http://localhost:5000/api/user/${type}
   
   const sendRequest =async (type ='login') =>{
-  
+  try{
   const res = await axios.post(`http://localhost:5000/api/user/${type}`,
    {
      name :inputs.name,
       email:inputs.email,
       password:inputs.password
-    })
-  .catch((err)=>console.log(err))
-  const data=await res.data;
-  console.log(data);
-  return data;
-    
+    });
+    return res.data
+  }
+
+  catch (err) {
+    throw new Error('Invalid credentials');
+  }
+
 
   }
   
 
-  const handleSubmit =(e)=>{
-      e.preventDefault();
-      console.log(inputs);
-     if(isSignUp){
-      sendRequest('signup').then((data)=>localStorage.setItem('userId',data.user._id)).then(()=>dispath(authActions.login())).then((()=>navigate("/drives"))).then((data)=>console.log(data))
 
-     }else{
-      sendRequest().then((data)=>localStorage.setItem('userId',data.user._id)).then(()=>dispath(authActions.login())).then((()=>navigate("/drives"))).then((data)=>console.log(data))
-     }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(inputs);
+    if (isSignUp) {
+      sendRequest('signup')
+        .then((data) => {
+          localStorage.setItem('userId', data.user._id);
+          return dispath(authActions.login());
+        })
+        .then(() => navigate("/auth"))
+        .catch((error) => alert(error.message));
+    } else {
+      sendRequest()
+        .then((data) => {
+          localStorage.setItem('userId', data.user._id);
+          return dispath(authActions.login());
+        })
+        .then(() => navigate("/drives"))
+        .catch((error) => alert(error.message));
+    }
   }
   return (
      <form onSubmit={handleSubmit}>

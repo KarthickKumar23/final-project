@@ -22,22 +22,23 @@ const AddDrives = () => {
   };
 
   const sendRequest = async () => {
-    const res = await axios.post('http://localhost:5000/driveDetails/add', {
+    try{const res = await axios.post('http://localhost:5000/driveDetails/add', {
       title: inputs.title,
       description: inputs.description,
       image: inputs.imageURL,
       user: localStorage.getItem('userId'),
       form: inputs.form
-    }).catch(err => console.log(err));
-    const data = await res.data;
-    return data;
+    }); return res.data}
+    catch(err){
+    throw new Error('Give proper details');
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
 
-    sendRequest().then(data => console.log(data)).then(() => navigate('/drives'));
+    sendRequest().then(data => console.log(data)).then(() => navigate('/drives')).catch(err => alert(err.message));
   };
   
 

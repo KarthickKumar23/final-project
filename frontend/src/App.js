@@ -32,8 +32,9 @@ function App() {
       <Routes>
         {!isLoggedIn && !isStudent ? (
           <React.Fragment>
+              <Route path='/auth' element={<Auth />} />
             <Route path='/studentAuth' element={<StudentAuth />} />
-            <Route path='/auth' element={<Auth />} />
+          
           </React.Fragment>
         ) : (
           <React.Fragment>

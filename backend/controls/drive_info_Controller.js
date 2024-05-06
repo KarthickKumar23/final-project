@@ -51,23 +51,48 @@ export const addDrives = async(req,res,next)=>{
    return res.status(200).json({drive});
 };
 
-export const updateDrives= async (req,res,next)=>{
-    const {title,description,form}=req.body;
-    const driveId=req.params.id;
-    let drive;
-    try{ 
-        drive =await driveInformation.findById(driveId,{
+// export const updateDrives= async (req,res,next)=>{
+//     const {title,description,form}=req.body;
+//     const driveId=req.params.id;
+//     console.log(driveId);
+//     let drive;
+//     try{ 
+//         drive =await driveInformation.findById(driveId,{
+//             title,  
+//             description,
+//             form
+//     })
+// }catch(err){
+//     console.log(err + "hdeb");
+//     return console.log(err);
+// }
+// console.log(drive);
+// if(!drive){
+//     return res.status(500).json({message:"Unable to update the drive"});
+// }
+//   res.status(200).json({drive});
+// };
+
+export const updateDrives = async (req, res, next) => {
+    const { title, description, form } = req.body;
+    const driveId = req.params.id;
+    
+    try {
+        const updatedDrive = await driveInformation.findByIdAndUpdate(driveId, {
             title,
             description,
             form
-    })
-}catch(err){
-    return console.log(err);
-}
-if(!drive){
-    return res.status(500).json({message:"Unable to update the drive"});
-}
-  res.status(200).json({drive});
+        }, { new: true }); // { new: true } option returns the modified document
+
+        if (!updatedDrive) {
+            return res.status(404).json({ message: "Drive not found" });
+        }
+
+        res.status(200).json({ drive: updatedDrive });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Failed to update drive" });
+    }
 };
 export const getById =async(req,res,next)=>{
     const id=req.params.id;

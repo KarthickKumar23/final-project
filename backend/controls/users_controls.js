@@ -29,6 +29,7 @@ export const signup= async (req,res,next) =>{
            return console.log(err);
          }
          if(existingUser){
+            // alert(`User aldready Exists! Login Instead`)
             return res.status(400).json({message:"User aldready Exists! Login Instead"});
          }
          const hashPassword =bcrypt.hashSync(password);

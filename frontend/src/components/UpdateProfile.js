@@ -93,8 +93,9 @@ const UpdateProfile = () => {
     const twelthImageUrl = await getDownloadURL(twelthImageRef);
 
   
-
-    const res = await axios.post('http://localhost:5000/student/updateProfile',  {
+try
+{    const res = await axios.post('http://localhost:5000/student/updateProfile',
+     {
         name: name,
         tenthMarkPercentage:tenthMarkPercentage,
         twelthMarkPercentage:twelethMarkPercentage,
@@ -106,16 +107,16 @@ const UpdateProfile = () => {
 
 
         
-    }).catch(err => console.log(err));
-    const data = res.data;
-    return data;
-  };
-
+    }); return res.data;
+  }catch(err){
+    throw new Error("Give correct credentials")
+  }
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
 
 
-    sendRequest().then(data => console.log(data)).then(() => navigate('/studentDrives'));
+    sendRequest().then(data => console.log(data)).then(() => navigate('/studentDrives')).catch(err => alert(err.message));
   };
 
   return (

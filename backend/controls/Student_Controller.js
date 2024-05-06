@@ -47,6 +47,7 @@ export const login =async (req,res,next)=>{
     }
 
     if(!existingUser){
+        // alert(`User didn't Exists! signUp Instead`)
         return res.status(404).json({message:"User does not exeist ,Please signup down"});
     }
     const isPasswordCorrect =bcrypt.compareSync(password,existingUser.password);
